@@ -55,23 +55,74 @@ describe Ida::Automata do
   end
 
   describe "#create_token_unless_whitespace" do
+    let(:transition_data) do
+      {
+        :"0" => { match: " ", transition: 1, name: :start_state },
+        :"1" => { match: " ", transition: 1, name: :whitespace, accepted: true }
+      }
+    end
 
-    context "when the token is whitespace" do
-      xit "does not attempt to create a token" do
-      end
+    subject { instance.create_token_unless_whitespace }
 
-      xit "returns nil" do
+    context "when the current state is not an accepted state" do
+
+      it "blows up" do
+        expect{subject}.to raise_error(Ida::Automata::UnacceptedStateError )
       end
     end
 
-    context "when the token is NOT whitespace" do
+    context "when the current state is an accepted state" do
 
-      xit "attempts to create a token" do
+      context "and the token is whitespace" do
+
+        before do
+          instance.transition!(" ")
+        end
+
+        it "does not attempt to create a token" do
+          expect(Ida::TokenFactory).to_not receive(:create)
+          subject
+        end
+
+        it "returns nil" do
+          expect(subject).to eq nil
+        end
       end
 
-      context "when the token could not be created" do
+      context "and the token is NOT whitespace" do
 
-        xit "blows up" do
+        let(:transition_data) do
+          {
+            :"0" => { match: "1", transition: 1, name: :start_state },
+            :"1" => { match: "2", transition: 1, name: :number, accepted: true }
+          }
+        end
+        let(:token) { instance_double("Ida::Token") }
+
+        before do
+          instance.transition!("1")
+          instance.transition!("2")
+          allow(Ida::TokenFactory).to receive(:create).with(:number, "12").and_return(token)
+        end
+
+        it "creates the token" do
+          expect(Ida::TokenFactory).to receive(:create).with(:number, "12").and_return(token)
+          subject
+        end
+
+        it "returns the token" do
+          expect(subject).to eq token
+        end
+
+        context "and the token could not be created" do
+
+          before do
+            allow(Ida::TokenFactory).to receive(:create).with(:number, "12").and_return(nil)
+          end
+
+          it "blows up" do
+            expect{subject}.to raise_error(Ida::Automata::InvalidTokenError)
+          end
         end
       end
     end
