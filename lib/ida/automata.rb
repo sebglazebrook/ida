@@ -12,9 +12,9 @@ module Ida
     end
 
     def transition!(character)
-      if @transition_data[@current_state.to_s.to_sym][:match] == character
+      if @transition_data[@current_state.to_s.to_sym].keys.include?(character)
         @current_string += character
-        @current_state = @transition_data[@current_state.to_s.to_sym][:transition]
+        @current_state = @transition_data[@current_state.to_s.to_sym][character]
         self
       else
         false

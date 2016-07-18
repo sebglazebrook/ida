@@ -4,8 +4,11 @@ describe Ida::Automata do
 
   let(:transition_data) do
     {
-      :"0" => { match: "1", transition: 1 },
-      :"1" => { match: "2", transition: 1 }
+      :"0" => {
+        "1" => 1,
+        "3" => 1
+    },
+      :"1" => { "2" => 1 }
     }
   end
   let(:instance) { described_class.new(transition_data) }
@@ -14,7 +17,16 @@ describe Ida::Automata do
 
     subject { instance.transition!(char) }
 
-    context "when the given character causes a state transition" do
+    context "when the given character causes a state transition on a first match" do
+
+      let(:char) { "1" }
+
+      it "transitions the automata" do
+        expect(subject.current_state).to eq(1)
+      end
+    end
+
+    context "when the given character causes a state transition on a NON first match" do
 
       let(:char) { "1" }
 
@@ -25,7 +37,7 @@ describe Ida::Automata do
 
     context "when the given character does not cause a state transition" do
 
-      let(:char) { "3" }
+      let(:char) { "4" }
 
       it "it does not transition" do
         subject
@@ -57,8 +69,8 @@ describe Ida::Automata do
   describe "#create_token_unless_whitespace" do
     let(:transition_data) do
       {
-        :"0" => { match: " ", transition: 1, name: :start_state },
-        :"1" => { match: " ", transition: 1, name: :whitespace, accepted: true }
+        :"0" => { " " => 1, name: :start_state },
+        :"1" => { " " => 1, name: :whitespace, accepted: true }
       }
     end
 
@@ -93,8 +105,8 @@ describe Ida::Automata do
 
         let(:transition_data) do
           {
-            :"0" => { match: "1", transition: 1, name: :start_state },
-            :"1" => { match: "2", transition: 1, name: :number, accepted: true }
+            :"0" => { "1" => 1, name: :start_state },
+            :"1" => { "2" => 1, name: :number, accepted: true }
           }
         end
         let(:token) { instance_double("Ida::Token") }
