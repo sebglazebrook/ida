@@ -2,34 +2,54 @@ require_relative "../../lib/ida/automata"
 
 describe Ida::Automata do
 
-  subject(:instance) { described_class.new }
+  let(:transition_data) do
+    {
+      :"0" => { match: "1", transition: 1 },
+      :"1" => { match: "2", transition: 1 }
+    }
+  end
+  let(:instance) { described_class.new(transition_data) }
 
   describe "#transition!" do
 
+    subject { instance.transition!(char) }
+
     context "when the given character causes a state transition" do
 
-      xit "transitions the automata" do
-      end
+      let(:char) { "1" }
 
-      xit "returns true" do
+      it "transitions the automata" do
+        expect(subject.current_state).to eq(1)
       end
     end
 
     context "when the given character does not cause a state transition" do
 
-      xit "it does not transition" do
+      let(:char) { "3" }
+
+      it "it does not transition" do
+        subject
+        expect(instance.current_state).to eq(0)
       end
 
-      xit "returns false" do
+      it "returns false" do
+        expect(subject).to eq(false)
       end
     end
   end
 
   describe "#reset!" do
 
+    subject { instance.reset! }
+
+    before do
+      instance.transition!("1")
+    end
+
     context "when the automata is not at it's start state" do
 
-      xit "gets reset to it's start state" do
+      it "gets reset to it's start state" do
+        expect(subject.current_state).to eq(0)
       end
     end
   end
