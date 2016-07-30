@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+
+require_relative "../lib/ida/automatas/transition_data_builder"
+
+builder = Ida::Automatas::TransitionDataBuilder.new
+builder.from_regex(/(\d+\.\d+|\d+)/, :number)
+builder.build

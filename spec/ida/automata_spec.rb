@@ -28,7 +28,7 @@ describe Ida::Automata do
 
     context "when the given character causes a state transition on a NON first match" do
 
-      let(:char) { "1" }
+      let(:char) { "3" }
 
       it "transitions the automata" do
         expect(subject.current_state).to eq(1)
