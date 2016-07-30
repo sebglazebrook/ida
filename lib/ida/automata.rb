@@ -29,7 +29,6 @@ module Ida
     end
 
     def create_token_unless_whitespace
-      raise UnacceptedStateError if @current_states.first.nil?
       raise UnacceptedStateError unless @transition_data[@current_states.first.to_s.to_sym][:accepted]
       unless @transition_data[@current_states.first.to_s.to_sym][:name] == :whitespace
         token = TokenFactory.create(@transition_data[@current_states.first.to_s.to_sym][:name], @current_string)
