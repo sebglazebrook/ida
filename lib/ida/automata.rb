@@ -7,7 +7,7 @@ module Ida
 
     attr_reader :current_states
 
-    def initialize(transition_data = {})
+    def initialize(transition_data)
       @transition_data = transition_data
       @current_states = [0]
       @current_string = ""

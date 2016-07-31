@@ -34,8 +34,9 @@ module Ida
 
       def build_transition_data
         {
-          :"0" => { "a" => 1, name: :start_state },
-          :"1" => { "a" => 1, name: :a, accepted: true  }
+          :"0" => { "i" => 1, name: :start_state },
+          :"1" => { "f" => 2 },
+          :"2" => { name: :keyword, accepted: true  }
         }
       end
 

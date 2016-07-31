@@ -1,3 +1,6 @@
+require_relative "./tokens/keyword"
+require_relative "./tokens/number"
+
 module Ida
   class TokenFactory
 
@@ -9,7 +12,8 @@ module Ida
 
     def self.class_lookup
       {
-        :number => Ida::Tokens::Number
+        :number => Ida::Tokens::Number,
+        :keyword => Ida::Tokens::Keyword
       }
     end
 
